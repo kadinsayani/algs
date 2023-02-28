@@ -6,31 +6,28 @@ G = {
     'E': ['F'],
     'F': [],
     'G': ['H'],
-    'H': ['G'],
+    'H': [],
     'I': [],
 }
 
+# detect_cycle
+# input: directed connected graph G = (V, E) with n vertices and m edges
+# output: true if G contains a cycle, false otherwise
 
-def detect_cycle(G, node):
-    visited = []
-    stack = []
-    cycle = False
 
-    visited.append(node)
-    stack.append(node)
+def detect_cycle(G, node, visited=set(), path=[]):
+    visited.add(node)
+    path += [node]
 
-    while stack:
-        s = stack.pop()
+    for n in G[node]:
+        if n not in visited:
+            cycle = detect_cycle(G, n, visited, path)
+            if cycle:
+                return True
+        elif n in path:
+            return True
 
-        for n in reversed(G[s]):
-            if n in visited:
-                cycle = True
-                break
-            elif n not in visited:
-                visited.append(n)
-                stack.append(n)
-
-    return cycle
+    return False
 
 
 def main():
